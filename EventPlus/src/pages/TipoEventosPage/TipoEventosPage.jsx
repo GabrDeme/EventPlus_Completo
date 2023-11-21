@@ -9,6 +9,7 @@ import { Input, Button } from "../../components/FormComponents/FormComponents";
 import api, { eventsTypeResource } from "../../services/service";
 import TableTp from "./TableTp/TableTp";
 import Notifcation from "../../components/Notification/Notification";
+import Spinner from "../../components/Spinner/Spinner"
 
 const TipoEventosPage = () => {
   const [frmEdit, setFrmEdit] = useState(false);
@@ -16,9 +17,11 @@ const TipoEventosPage = () => {
   const [idEvento, setIdEvento] = useState(null);
   const [tipoEventos, setTipoEventos] = useState([]);
   const [notifyUser, setNotifyUser] = useState();
+  const [showSpinner, setShowSpinner] = useState(false);
 
   useEffect(() => {
     async function loadEventsType() {
+      setShowSpinner(true)
       try {
         const retorno = await api.get(eventsTypeResource);
         setTipoEventos(retorno.data);
@@ -27,6 +30,8 @@ const TipoEventosPage = () => {
         console.log("Erro na api");
         console.log(error);
       }
+
+      setShowSpinner(false)
     }
     // chama a função/api no carregamento da página/componente
     loadEventsType();
@@ -95,7 +100,7 @@ const TipoEventosPage = () => {
     setIdEvento(null);
   }
   //cadastrar a atualização da api////////////////////////////////////////////
-  async function handleUpdate(e, setShowSpinner) {
+  async function handleUpdate(e) {
     e.preventDefault();
 
     try {
@@ -164,6 +169,9 @@ const TipoEventosPage = () => {
   return (
     <>
       {<Notifcation {...notifyUser} setNotifyUser={setNotifyUser} />}
+
+      {showSpinner ? <Spinner /> : null}
+
       <MainContent>
         <section className="cadastro-evento-section">
           <Container>
