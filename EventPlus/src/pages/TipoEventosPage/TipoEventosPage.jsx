@@ -22,6 +22,7 @@ const TipoEventosPage = () => {
   useEffect(() => {
     async function loadEventsType() {
       setShowSpinner(true)
+      setTimeout(() => { console.log("esperando");},2000)
       try {
         const retorno = await api.get(eventsTypeResource);
         setTipoEventos(retorno.data);
@@ -39,6 +40,7 @@ const TipoEventosPage = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setShowSpinner(true)
 
     if (titulo.trim().length < 3) {
       setNotifyUser({
@@ -53,7 +55,7 @@ const TipoEventosPage = () => {
       //alert("O titulo deve ter pelo menos 3 caracteres");
     } else {
       try {
-        const retorno = await api.post(eventsTypeResource, {
+        await api.post(eventsTypeResource, {
           titulo: titulo,
         });
         const buscaEventos = await api.get(eventsTypeResource);
@@ -78,6 +80,7 @@ const TipoEventosPage = () => {
           showMessage: true,
         });
       }
+      setShowSpinner(false)
     }
   }
 
@@ -86,12 +89,14 @@ const TipoEventosPage = () => {
   async function showUpdateForm(idElement) {
     setFrmEdit(true);
     setIdEvento(idElement);
+    setShowSpinner(true)
 
     try {
       const retorno = await api.get(`${eventsTypeResource}/${idElement}`);
       setTitulo(retorno.data.titulo);
       console.log(retorno.data);
     } catch (error) {}
+    setShowSpinner(false)
   }
   //cancelar a tela/ação de edição (volta para o form de cadastro)
   function editActionAbort() {
@@ -102,9 +107,24 @@ const TipoEventosPage = () => {
   //cadastrar a atualização da api////////////////////////////////////////////
   async function handleUpdate(e) {
     e.preventDefault();
+    setShowSpinner(true)
 
     try {
-      const retorno = await api.put(eventsTypeResource + "/" + idEvento);
+      const retorno = await api.put(eventsTypeResource + "/" + idEvento, {
+        titulo: titulo,
+      });
+      
+      if (titulo.trim().length < 3) {
+        setNotifyUser({
+          titleNote: "Erro",
+          textNote: "O cadastro deve ter no mínimo 3 caracteres.",
+          imgIcon: "warning",
+          imgAlt:
+            "Imagem de ilustração de aviso. Boneco batendo na exclamação.",
+          showMessage: true,
+        });
+        return;
+      }
 
       if (retorno.status === 204) {
         setNotifyUser({
@@ -132,7 +152,7 @@ const TipoEventosPage = () => {
 
     alert(`editando o cadastro` + e.target.value);
 
-    //setShowSpinner(true);
+    setShowSpinner(false);
 
     //const idTipoEvento = frmEdit.idTipoEvento; //frmEditData
   }
@@ -220,7 +240,6 @@ const TipoEventosPage = () => {
                         setTitulo(e.target.value);
                       }}
                     />
-                    <span>{idEvento}</span>
                     <div className="buttons-editbox">
                       <Button
                         textButton="Atualizar"

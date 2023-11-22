@@ -6,7 +6,7 @@ import EventosPage from "./pages/EventosPage/EventosPage";
 import HomePage from "./pages/HomePage/HomePage";
 import TipoEventosPage from "./pages/TipoEventosPage/TipoEventosPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
-import TestePage from "./pages/TestePage/TestePage";
+// import TestePage from "./pages/TestePage/TestePage";
 
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -21,7 +21,7 @@ const Rotas = () => {
                 <Route element={<EventosPage/>} path={"/eventos"}/>
                 <Route element={<TipoEventosPage/>} path={"/tiposeventos"}/>
                 <Route element={<LoginPage/>} path={"/login"}/>
-                <Route element={<TestePage/>} path={"/teste"}/>
+                {/* <Route element={<TestePage/>} path={"/teste"}/> */}
             </Routes>
         <Footer />
     </BrowserRouter>
