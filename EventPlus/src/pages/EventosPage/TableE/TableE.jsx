@@ -37,16 +37,16 @@ const TableE = ({dados, fnDelete = null, fnUpdate = null}) => {
           return(
             <tr className="table-data__head-row">
             <td className="table-data__data table-data__data--big">
-              {e.nome}
+              {e.nomeEvento}
             </td>
 
             <td className="table-data__data table-data__data--big">
               {e.descricao}
             </td>
 
-            {/* <td className="table-data__data table-data__data--big">
-              {e.nome}
-            </td> */}
+            <td className="table-data__data table-data__data--big">
+              {e.tipoEvento}
+            </td>
 
             <td className="table-data__data table-data__data--big">
               {e.dataEvento}

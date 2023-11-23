@@ -205,7 +205,7 @@ const TipoEventosPage = () => {
                 onSubmit={frmEdit ? handleUpdate : handleSubmit}
               >
                 {!frmEdit ? (
-                  // Cadastrar
+                  // Cadastro Tipos Eventos
                   <>
                     <Input
                       id="Titulo"
@@ -218,7 +218,6 @@ const TipoEventosPage = () => {
                         setTitulo(e.target.value);
                       }}
                     />
-                    <span>{titulo}</span>
                     <Button
                       textButton="Cadastrar"
                       id="Cadastrar"
@@ -227,7 +226,7 @@ const TipoEventosPage = () => {
                     />
                   </>
                 ) : (
-                  //Editar
+                  //Editar Tipo Eventos
                   <>
                     <Input
                       id="Titulo"
