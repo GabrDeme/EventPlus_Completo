@@ -7,19 +7,25 @@ import ImageIllustrator from "../../components/ImageIllustrator/ImageIllustrator
 import eventoImage from "../../assets/images/evento.svg";
 import {  Select,  Input,  Button,} from "../../components/FormComponents/FormComponents";
 import TableE from "./TableE/TableE";
-// import Notifcation from "../../components/Notification/Notification";
+import Notifcation from "../../components/Notification/Notification";
 import api, {  eventsResource,  eventsTypeResource,} from "../../services/service";
 import Spinner from "../../components/Spinner/Spinner";
 
 const EventosPage = () => {
   const [frmEdit, setFrmEdit] = useState(false);
+  const [idEvento, setIdEvento] = useState(null);
   const [nome, setNome] = useState("");
   const [descricao, setDescricao] = useState("");
   const [dataEvento, setDataEvento] = useState("");
   const [evento, setEvento] = useState([]);
   const [tipoEvento, setTipoEvento] = useState([]);
+  const [idTipoEvento, setIdTipoEvento] = useState([]);
+  const [notifyUser, setNotifyUser] = useState();
   const [showSpinner, setShowSpinner] = useState(false);
 
+  const ID_INSTITUICAO = "0577d714-836b-40c4-87a2-8be03d136588";
+
+  /////////////////////////////////USE EFFECT/////////////////////////////////
   useEffect(() => {
     async function loadEvents() {
       setShowSpinner(true);
@@ -38,72 +44,6 @@ const EventosPage = () => {
     loadEvents();
   }, []);
 
-  /////////////////////////////////CADASTRAR/////////////////////////////////
-  async function handleSubmitE(e) {
-    e.preventDefault();
-    setShowSpinner(true);
-
-    try {
-      await api.post(eventsResource, {
-        nome: nome,
-        descricao: descricao,
-        tipoEvento: tipoEvento,
-        dataEvento: dataEvento,
-      });
-      const buscaEventos = await api.get(eventsResource);
-      setEvento(buscaEventos.data);
-    } catch (error) {
-      alert("erro");
-    }
-  }
-  /////////////////////////////////EDITAR/////////////////////////////////
-  async function handleUpdateE(e) {
-    e.preventDefaul();
-    setShowSpinner(true);
-  }
-
-  async function editActionAbortE(e) {
-    e.preventDefaul();
-    setShowSpinner(true);
-  }
-
-  /////////////////////////////////DELETAR/////////////////////////////////
-  async function handleDelete(idElement) {
-    try {
-      //promise que chama a rota delete passando o id do evento
-      const promise = await api.delete(`${eventsResource}/${idElement}`);
-      //condição com mensagem para confirmar a exclusão
-      if (window.confirm("confirma a exclusão?")) {
-
-        if (promise.status === 204) {
-          // setNotifyUser({
-          //   titleNote: "Exclusão",
-          //   textNote: `Evento apagado com sucesso`,
-          //   imgIcon: "success",
-          //   imgAlt:
-          //     "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de x",
-          //   showMessage: true,
-          // });
-
-          //atualiza os dados da api dando um get
-          const buscaEventos = await api.get(eventsResource);
-
-          setEvento(buscaEventos.data);
-        }
-      }
-    } catch (error) {
-      // setNotifyUser({
-      //   titleNote: "erro",
-      //   textNote: `problema ao apagar,verifique a conexão`,
-      //   imgIcon: "danger",
-      //   imgAlt:
-      //     "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de x",
-      //   showMessage: true,
-      // });
-    }
-  }
-  ////////////////////////////////////////////////////////////////////////////////
-
   useEffect(() => {
     async function loadEventsType() {
       try {
@@ -114,6 +54,164 @@ const EventosPage = () => {
     loadEventsType();
   }, []);
 
+  /////////////////////////////////CADASTRAR/////////////////////////////////
+  async function handleSubmitE(e) {
+    e.preventDefault();
+    setShowSpinner(true);
+    if (nome.trim().length < 7) {
+      setNotifyUser({
+        titleNote: "Aviso",
+        textNote: "O título deve ter no mínimo 7 caracteres",
+        imgIcon: "warning",
+        imgAlt:
+          "Imagem de ilustracao de sucesso. Moca segurando um balao com simbolo de confirmacao ok",
+        showMessage: true,
+      });
+      return;
+    }
+    try {
+      const retorno = await api.post(eventsResource, {
+        nomeEvento: nome,
+        descricao: descricao,
+        idTipoEvento: idTipoEvento,
+        dataEvento: dataEvento,
+        idInstituicao: ID_INSTITUICAO,
+      });
+      const buscaEventos = await api.get(eventsResource);
+      setEvento(buscaEventos.data);
+    } catch (error) {
+      alert("erro");
+    }
+    setShowSpinner(false);
+  }
+  /////////////////////////////////EDITAR/////////////////////////////////
+  async function handleUpdateE(e) {
+    e.preventDefault();
+    setShowSpinner(true);
+
+    try {
+      const retorno = await api.put(eventsResource + "/" + idEvento, {
+        nomeEvento : nome,
+        descricao : descricao,
+        idTipoEvento : idTipoEvento,
+        dataEvento : dataEvento,
+        idInstituicao : ID_INSTITUICAO,
+      });
+      
+      if (nome.trim().length < 7) {
+        setNotifyUser({
+          titleNote: "Erro",
+          textNote: "O cadastro deve ter no mínimo 7 caracteres.",
+          imgIcon: "warning",
+          imgAlt:
+            "Imagem de ilustração de aviso. Boneco batendo na exclamação.",
+          showMessage: true,
+        });
+        return;
+      }
+
+      if (retorno.status === 204) {
+        setNotifyUser({
+          titleNote: "Sucesso",
+          textNote: `Atualizado com sucesso`,
+          imgIcon: "success",
+          imgAlt:
+            "Imagem de ilustracao de sucesso. Moca segurando um balao com simbolo de confirmacao ok",
+          showMessage: true,
+        });
+
+        const buscaEventos = await api.get(eventsResource);
+        setEvento(buscaEventos.data);
+      }
+    } catch (error) {
+      setNotifyUser({
+        titleNote: "Erro",
+        textNote: `erro no atualizar`,
+        imgIcon: "danger",
+        imgAlt:
+          "Imagem de ilustracao de erro. Rapaz segurando um balao com simbolo",
+        showMessage: true,
+      });
+    }
+    setShowSpinner(false);
+
+  }
+
+  async function showUpdateFormE(idElement) {
+    setFrmEdit(true);
+    setIdEvento(idElement);
+
+    try {
+      const retornoEdit = await api.get(`${eventsResource}/${idElement}`);
+      setFrmEdit(true);
+      setNome(retornoEdit.data.nomeEvento);
+      setDescricao(retornoEdit.data.descricao);
+      setIdTipoEvento(retornoEdit.data.idTipoEvento);
+      
+      const eventData = retornoEdit.data.dataEvento;
+      const formatteDate = new Date(eventData).toISOString().split("T")[0];
+      setDataEvento(formatteDate)
+
+      setIdEvento(idElement);
+
+      
+
+    } catch (error) {
+      setNotifyUser({
+        titleNote: "Aviso",
+        textNote: "Não foi possível editar o evento",
+        imgIcon: "warning",
+        imgAlt:
+          "Imagem de aviso, mulher na frente de um ponto de exclamação",
+        showMessage: true,
+      });
+    }
+  }
+
+  async function editActionAbortE(e) {
+    setFrmEdit(false);
+    setNome("");
+    setDescricao(""); 
+    setDataEvento("");
+    setIdTipoEvento("");
+  }
+
+  /////////////////////////////////DELETAR/////////////////////////////////
+  async function handleDelete(idElement) {
+    try {
+      //promise que chama a rota delete passando o id do evento
+      const promise = await api.delete(`${eventsResource}/${idElement}`);
+      //condição com mensagem para confirmar a exclusão
+      if (window.confirm("confirma a exclusão?")) {
+        if (promise.status === 204) {
+          setNotifyUser({
+            titleNote: "Exclusão",
+            textNote: `Evento apagado com sucesso`,
+            imgIcon: "success",
+            imgAlt:
+              "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de x",
+            showMessage: true,
+          });
+
+          //atualiza os dados da api dando um get
+          const buscaEventos = await api.get(eventsResource);
+
+          setEvento(buscaEventos.data);
+        }
+      }
+    } catch (error) {
+      setNotifyUser({
+        titleNote: "erro",
+        textNote: `problema ao apagar,verifique a conexão`,
+        imgIcon: "danger",
+        imgAlt:
+          "Imagem de ilustração de sucesso. Moça segurando um balão com símbolo de x",
+        showMessage: true,
+      });
+    }
+  }
+  /////////////////////////////////FUNÇÃO PARA CHAMAR TIPOS EVENTOS/////////////////////////////////
+  ////////////////////////////////////////////NO LISTAR/////////////////////////////////////////////
   function bglh(retornoApi) {
     let arrayOptions = [];
     retornoApi.forEach((e) => {
@@ -125,6 +223,8 @@ const EventosPage = () => {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   return (
     <>
+      {<Notifcation {...notifyUser} setNotifyUser={setNotifyUser} />}
+
       {showSpinner ? <Spinner /> : null}
 
       <MainContent>
@@ -174,6 +274,10 @@ const EventosPage = () => {
                       name={"tipoEvento"}
                       required={"required"}
                       options={bglh(tipoEvento)}
+                      defaultValue={idTipoEvento}
+                      manipulationFunction={(e) => {
+                        setIdTipoEvento(e.target.value);
+                      }}
                     />
 
                     <Input
@@ -226,6 +330,10 @@ const EventosPage = () => {
                       name={"tipoEvento"}
                       required={"required"}
                       options={bglh(tipoEvento)}
+                      defaultValue={idTipoEvento}
+                      manipulationFunction={(e) => {
+                        setIdTipoEvento(e.target.value);
+                      }}
                     />
 
                     <Input
@@ -239,19 +347,24 @@ const EventosPage = () => {
                         setDataEvento(e.target.value);
                       }}
                     />
-                    <Button
-                      textButton="Cadastrar"
-                      id="Cadastrar"
-                      name="Cadastrar"
+
+                    <div className="buttons-editbox">
+                      <Button
+                      textButton="Atualizar"
+                      id="Atualizar"
+                      name="Atualizar"
                       type="submit"
+                      additionalClass={"button-component--middle"}
                     />
                     <Button
                       textButton="Cancelar"
                       id="Cancelar"
                       name="Cancelar"
                       type="submit"
-                      manipulationFunction={editActionAbortE} ////
+                      manipulationFunction={editActionAbortE} 
+                      additionalClass={"button-component--middle"}////
                     />
+                    </div>              
                   </>
                 )}
               </form>
@@ -264,7 +377,7 @@ const EventosPage = () => {
             <Titulo titleText={"Lista de Eventos"} color="white" />
             <TableE
               dados={evento}
-              // fnUpdate={showUpdateForm}
+              fnUpdate={showUpdateFormE}
               fnDelete={handleDelete}
             />
           </Container>

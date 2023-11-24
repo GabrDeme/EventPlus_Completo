@@ -33,23 +33,27 @@ const TableE = ({dados, fnDelete = null, fnUpdate = null}) => {
 
         {/* corpo */}
       <tbody>
-        {dados.map((e) => {
+        {dados.map((ev) => {
           return(
             <tr className="table-data__head-row">
             <td className="table-data__data table-data__data--big">
-              {e.nomeEvento}
+            {/* idevento ={ev.idEvento} */}
+              {ev.nomeEvento}
             </td>
 
             <td className="table-data__data table-data__data--big">
-              {e.descricao}
+            {/* idevento ={ev.idEvento} */}
+              {ev.descricao}
             </td>
 
             <td className="table-data__data table-data__data--big">
-              {e.tipoEvento}
+              
+              {ev.tiposEvento.titulo}
             </td>
 
             <td className="table-data__data table-data__data--big">
-              {e.dataEvento}
+            {/* idevento ={ev.idEvento} */}
+              {new Date(ev.dataEvento).toLocaleDateString()}
             </td>
   
 
@@ -58,7 +62,7 @@ const TableE = ({dados, fnDelete = null, fnUpdate = null}) => {
               className="table-data__icon" 
               src={editPen} alt=""
               onClick={(e) => {
-                fnUpdate(e.idEvento)
+                fnUpdate(ev.idEvento)
               }} 
               />
             </td>
@@ -68,7 +72,7 @@ const TableE = ({dados, fnDelete = null, fnUpdate = null}) => {
                 className="table-data__icon" 
                 src={trashDelete} alt="" 
                 onClick={(e) => {
-                  fnDelete(e.idEvento)
+                  fnDelete(ev.idEvento)
                 }}
               />
             </td>
