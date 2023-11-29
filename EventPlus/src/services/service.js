@@ -15,6 +15,8 @@ export const nextEventResource = '/Evento/ListarProximos';
  */
 export const eventsTypeResource = '/TiposEvento'
 
+export const loginResource = '/Login'
+
 const portAPI = "7118";
 const localApiUrl = `https://localhost:${portAPI}/api`;
 const externalApiUrl = null;
