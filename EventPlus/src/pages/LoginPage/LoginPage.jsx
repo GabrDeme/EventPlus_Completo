@@ -6,6 +6,7 @@ import { Input, Button } from "../../components/FormComponents/FormComponents";
 import api, { loginResource } from "../../services/service";
 
 import "./LoginPage.css";
+import "UserContext, userDecodeToken"
 
 const LoginPage = () => {
   const [user, setUser] = useState({ email: "gabriel@api.com", senha: "" });
@@ -20,21 +21,17 @@ const LoginPage = () => {
         const promise = await api.post(loginResource, {
           email: user.email,
           senha: user.senha,
-        })
+        });
 
-        console.log("dados do usuário");
-        console.log(promise.data);
+        const userFullToken = userDecodeToken(promise.data.token);
+        setUserData(userFullToken);
+
+        localStorafe.setItem("token", JSON.stringify(userFullToken))
+
 
       } catch (error) {
         alert("Verifique os dados e a conexão com a internet!");
-        // setNotifyUser({
-        //   titleNote: "Aviso",
-        //   textNote: "O senha deve ter no mínimo 6 caracteres",
-        //   imgIcon: "warning",
-        //   imgAlt:
-        //     "Imagem de ilustracao de sucesso. Moca segurando um balao com simbolo de confirmacao ok",
-        //   showMessage: true,
-        // });
+
         console.log("dados do usuário");
         console.log(promise.data);
       }
