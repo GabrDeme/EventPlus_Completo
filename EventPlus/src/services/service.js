@@ -14,6 +14,10 @@ export const nextEventResource = '/Evento/ListarProximos';
  * Rota para o recurso Tipos de Eventos
  */
 export const eventsTypeResource = '/TiposEvento'
+/**
+ * Rota para o recurso Tipos de Eventos
+ */
+export const myEventsResource = 'Presencas/ListarMinhas';
 
 export const loginResource = '/Login'
 

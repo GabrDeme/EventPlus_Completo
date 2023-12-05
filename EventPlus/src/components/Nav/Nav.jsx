@@ -1,44 +1,53 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./Nav.css";
-
-import { Link } from "react-router-dom";
 
 //import imagens
 import logMobile from "../../assets/images/logo-white.svg";
 import logDesktop from "../../assets/images/logo-pink.svg";
 
-const Nav = ({ exibeNavbar, setExibeNavbar }) => {
-  console.log(`${exibeNavbar}`);
+import { Link } from "react-router-dom";
+import { UserContext } from '../../context/AuthContext';
+const Nav = ({exibeNavbar, setExibeNavbar}) => {
+  console.log(`EXIBE O MENU? ${exibeNavbar}`);
+
+  //pegando dados do usuario
+  const {userData} = useContext(UserContext);
 
   return (
-    <nav className={`navbar ${exibeNavbar ? "exibeNavbar" : ""}`}>
-      <span
-        className="navbar__close"
-        onClick={() => {
-          setExibeNavbar(false)
-        }}
-      >
-        X
-      </span>
+      //lógica para mostrar ou não a Navbar
+      <nav className={`navbar ${exibeNavbar ? "exibeNavbar" : ""}`}>
 
-      <Link to="/" className="eventlogo">
-        <img
-          className="eventlogo__logo-image"
-          src={window.innerWidth >= 992 ? logDesktop : logMobile}
-          alt="Event Plus Logo"
-        />
-      </Link>
+          <span onClick={() => {setExibeNavbar(false)}} className='navbar__close'>x</span>
 
-      <div className="navbar__items-box">
+          <Link to="/" className='eventlogo'>
+              <img className='eventlogo__logo-image' src={window.innerWidth >= 992 ? logDesktop : logMobile} alt="Event Plus Logo" />
+          </Link>
 
-        <Link onClick={() => {setExibeNavbar(false)}} to="/" className="navbar__item">Home</Link>
-        <Link onClick={() => {setExibeNavbar(false)}} to="/eventos" className="navbar__item">Eventos</Link>
-        <Link onClick={() => {setExibeNavbar(false)}} to="/tiposeventos" className="navbar__item">Tipos de Evento</Link>
-        {/* <Link onClick={() => {setExibeNavbar(false)}} to="/login" className="navbar__item">Login</Link> */}
-        {/* <Link onClick={() => {setExibeNavbar(false)}} to="/teste" className="navbar__item">Teste</Link> */}
+          <div className="navbar__items-box">
+              <Link onClick={() => {setExibeNavbar(false)}} to="/" className='navbar__item'>Home</Link>
 
-      </div>
-    </nav>
+              {userData.nome && userData.role === "Administrador" 
+              ?
+              (
+                  <>
+                      <Link onClick={() => {setExibeNavbar(false)}} to="/tiposeventos" className='navbar__item'>
+                          Tipos de Evento
+                      </Link>
+
+                      <Link onClick={() => {setExibeNavbar(false)}} to="/eventos" className='navbar__item'>
+                          Evento
+                      </Link>
+                  </>
+              )
+              : userData.nome && userData.role === "Comum" ?  (
+
+                  <Link to="/eventos-aluno" className='navbar__item'>
+                      Eventos Aluno
+                  </Link>
+              ) : null}
+          </div>
+
+      </nav>
   );
 };
 

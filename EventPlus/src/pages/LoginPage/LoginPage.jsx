@@ -10,7 +10,7 @@ import "./LoginPage.css";
 import { UserContext, userDecodeToken } from "../../context/AuthContext";
 
 const LoginPage = () => {
-  const [user, setUser] = useState({ email: "gabriel@api.com", senha: "" });
+  const [user, setUser] = useState({ email: "comum@comum.com", senha: "Comum123" });
   const {userData, setUserData} = useContext(UserContext)
   const Navigate = useNavigate ()
   // const [notifyUser, setNotifyUser] = useState();
