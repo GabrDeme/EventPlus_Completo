@@ -33,7 +33,7 @@ const TableEvA = ({ dados, fnConnect = null, fnShowModal = null }) => {
                 {e.nomeEvento}
               </td>
               <td className="tbal-data__data tbal-data__data--big tbal-data__btn-actions">
-                 {dateFormatDbToView(e.dataEvento)} 
+                {dateFormatDbToView(e.dataEvento)}
               </td>
 
               <td className="tbal-data__data tbal-data__data--big tbal-data__btn-actions">
@@ -45,7 +45,12 @@ const TableEvA = ({ dados, fnConnect = null, fnShowModal = null }) => {
                   onClick={fnShowModal}
                 />
 
-                <ToggleSwitch fnManipulator={fnConnect} />
+                <ToggleSwitch
+                  toggleActive={e.situacao}
+                  manipulationFunction={() => {
+                    fnConnect(e.idEvento, e.situacao ? "unconnect" : "connect", e.situacao ? e.idPresencaEvento: null);
+                  }}
+                />
               </td>
             </tr>
           );

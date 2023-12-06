@@ -14,6 +14,7 @@ const Toggle = ({manipulationFunction = null, toggleActive = false}) => {
         }
       }
     }
+    return arrAllEvents;
   }
 
   
