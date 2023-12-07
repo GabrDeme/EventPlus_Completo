@@ -48,7 +48,7 @@ const TableEvA = ({ dados, fnConnect = null, fnShowModal = null }) => {
                 <ToggleSwitch
                   toggleActive={e.situacao}
                   manipulationFunction={() => {
-                    fnConnect(e.idEvento, e.situacao ? "unconnect" : "connect", e.situacao ? e.idPresencaEvento: null);
+                    fnConnect(e.idEvento, e.situacao ? "unconnect" : "connect", e.idPresencaEvento);
                   }}
                 />
               </td>
