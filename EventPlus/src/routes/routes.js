@@ -6,12 +6,15 @@ import EventosPage from "../pages/EventosPage/EventosPage";
 import HomePage from "../pages/HomePage/HomePage";
 import TipoEventosPage from "../pages/TipoEventosPage/TipoEventosPage";
 import LoginPage from "../pages/LoginPage/LoginPage";
+import EventosAlunoPage from "../pages/EventosAlunoPage/EventosAlunoPage";
+import EventosAnterioresPage  from "../pages/EventosAnterioresPage/EventosAnterioresPage";
 // import TestePage from "./pages/TestePage/TestePage";
 
 import Header from "../components/Header/Header";
 import Footer from "../components/Footer/Footer";
 import { PrivateRoute } from "./PrivateRoute";
-import EventosAlunoPage from "../pages/EventosAlunoPage/EventosAlunoPage";
+
+
 
 
 const Rotas = () => {
@@ -35,6 +38,14 @@ const Rotas = () => {
             </PrivateRoute>
           }
           path={"/eventos-aluno"}
+        />
+        <Route
+          element={
+            <PrivateRoute >
+              <EventosAnterioresPage />
+            </PrivateRoute>
+          }
+          path={"/eventos-info"}
         />
         <Route
           path="/tiposeventos"

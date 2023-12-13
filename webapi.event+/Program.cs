@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Azure.CognitiveServices.ContentModerator;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using System.Reflection;
@@ -71,6 +72,9 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
+    //Adicionar dentro de AddSwaggerGen
+    options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+
 
     //Configura o Swagger para usar o arquivo XML gerado
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -115,14 +119,30 @@ builder.Services.AddCors(options =>
         });
 });
 
+//Configuração do serviço de moderação de conteúido - Azure
+
+builder.Services.AddSingleton(provider => new ContentModeratorClient(
+    new ApiKeyServiceClientCredentials("4aa384fecbc24d7eba1fe841a9566f3c"))
+{ 
+    Endpoint = "https://eventmodereator-demetrio.cognitiveservices.azure.com/"
+}
+);
+
+
 var app = builder.Build();
 
-//Habilite o middleware para atender ao documento JSON gerado e à interface do usuário do Swagger
+//Alterar dados do Swagger para a seguinte configuração
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
 }
+
+app.UseSwagger(options =>
+{
+    options.SerializeAsV2 = true;
+});
+
+app.UseSwaggerUI();
 
 //Para atender à interface do usuário do Swagger na raiz do aplicativo
 app.UseSwaggerUI(options =>
@@ -132,6 +152,8 @@ app.UseSwaggerUI(options =>
 });
 
 app.UseCors("CorsPolicy");
+
+//app.useRouting();
 
 app.UseHttpsRedirection();
 

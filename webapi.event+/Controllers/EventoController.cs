@@ -44,6 +44,19 @@ namespace webapi.event_.Controllers
             }
         }
 
+        [HttpGet("ListarUltimos")]
+        public IActionResult GetLastEvents()
+        {
+            try
+            {
+                return Ok(_eventoRepository.ListarUltimos());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetById(Guid id)
         {

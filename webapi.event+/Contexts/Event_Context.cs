@@ -28,8 +28,11 @@ namespace webapi.event_.Contexts
         /// <param name="optionsBuilder">Objeto com as configurações definidas</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            //SA
             optionsBuilder.UseSqlServer("Server=NOTE21-S15; Database=event+_v3; User Id= sa; Pwd= Senai@134; TrustServerCertificate= True;");
             base.OnConfiguring(optionsBuilder);
+
+            //Azure
         }
     }
 }
