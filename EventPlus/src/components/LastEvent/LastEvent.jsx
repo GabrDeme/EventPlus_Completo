@@ -1,13 +1,13 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Tooltip } from "react-tooltip";
 import "./LastEvent.css";
 
 import { dateFormatDbToView } from "../../utils/stringFunctions";
 
 const LastEvent = ({ title, description, eventDate, idEvent }) => {
-  function conectar(idEvent) {
-    // dá pra usar a prop idEvent? testar
-    alert(`Chamar o recurso para conectar: ${idEvent}`);
+  function visualizar(idEvent) {
+
   }
 
   return (
@@ -30,14 +30,15 @@ const LastEvent = ({ title, description, eventDate, idEvent }) => {
         {new Date(eventDate).toLocaleDateString()}
       </p>
 
-      <a
-        onClick={() => {
-          conectar(idEvent);
-        }}
+      <Link
+        // onClick={() => {
+        //   visualizar(idEvent);
+        // }}
+        
         className="event-card__connect-link"
       >
         Visualizar
-      </a>
+      </Link>
     </article>
   );
 };

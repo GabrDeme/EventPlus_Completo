@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../services/service";
 import "./HomePage.css";
-
+import { Link } from "react-router-dom";
 import MainContent from "../../components/Main/MainContent";
 import Banner from "../../components/Banner/Banner";
 import VisionSection from "../../components/VisionSection/VisionSection";
@@ -114,6 +114,16 @@ const HomePage = () => {
               })}
             </div>
           </Container>
+
+          <Link
+            // onClick={() => {
+            //   visualizar(idEvent);
+            // }}
+            to="/eventos-info"
+            className="all-event-card__connect-link"
+          >
+            Visualizar todos
+          </Link>
         </section>
 
         <VisionSection />

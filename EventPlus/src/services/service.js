@@ -25,11 +25,11 @@ export const myEventsResource = 'Presencas/ListarMinhas';
 /**
  * Rota para o recurso Presenças de Eventos
  */
-export const presencesEventResource = 'Presencas/ListarMinhas';
+export const presencesEventResource = 'PresencasEvento';
 /**
  * Rota para o recurso Comentario de Eventos
  */
-export const commentsResource = '/ComentariosEvento/BuscarPorIdUsuario';
+export const commentsResource = '/ComentariosEvento';
 
 
 
