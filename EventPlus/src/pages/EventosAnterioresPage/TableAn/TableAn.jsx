@@ -1,13 +1,13 @@
 import React from "react";
 import "./TableAn.css";
 
-import editPen from '../../../assets/images/edit-pen.svg'
-import trashDelete from '../../../assets/images/trash-delete.svg'
+import editPen from "../../../assets/images/edit-pen.svg";
+import trashDelete from "../../../assets/images/trash-delete.svg";
 
-const TableAn = ({dados, fnDelete = null, fnUpdate = null}) => {
+const TableAn = ({ dados, fnDelete = null, fnUpdate = null }) => {
   return (
-    <table className = "table-data">
-        {/* cabeçalho */}
+    <table className="table-data">
+      {/* cabeçalho */}
       <thead className="table-data__head">
         <tr className="table-data__head-row">
           <th className="table-data__head-title table-data__head-title--big">
@@ -31,55 +31,43 @@ const TableAn = ({dados, fnDelete = null, fnUpdate = null}) => {
         </tr>
       </thead>
 
-        {/* corpo */}
+      {/* corpo */}
       <tbody>
         {dados.map((an) => {
-          return(
+          return (
             <tr className="table-data__head-row">
-            <td className="table-data__data table-data__data--big">
-            {/* idevento ={ev.idEvento} */}
-              {an.nomeEvento}
-            </td>
+              <td className="table-data__data table-data__data--big">
+                {/* idevento ={ev.idEvento} */}
+                {an.nomeEvento}
+              </td>
 
-            <td className="table-data__data table-data__data--big">
-            {/* idevento ={ev.idEvento} */}
-              {an.descricao}
-            </td>
+              <td className="table-data__data table-data__data--big">
+                {/* idevento ={ev.idEvento} */}
+                {an.descricao}
+              </td>
 
-            <td className="table-data__data table-data__data--big">
-              
-              {an.tiposEvento.titulo}
-            </td>
+              <td className="table-data__data table-data__data--big">
+                {an.tiposEvento}
+              </td>
 
-            <td className="table-data__data table-data__data--big">
-            {/* idevento ={ev.idEvento} */}
-              {new Date(an.dataEvento).toLocaleDateString()}
-            </td>
-  
+              <td className="table-data__data table-data__data--big">
+                {/* idevento ={ev.idEvento} */}
+                {new Date(an.dataEvento).toLocaleDateString()}
+              </td>
 
-            <td className="table-data__data table-data__data--little">
-              <img 
-              className="table-data__icon" 
-              src={editPen} alt=""
-              onClick={(e) => {
-                fnUpdate(an.idEvento)
-              }} 
-              />
-            </td>
-  
-            <td className="table-data__data table-data__data--little">
-              <img 
-                className="table-data__icon" 
-                src={trashDelete} alt="" 
-                onClick={(e) => {
-                  fnDelete(an.idEvento)
-                }}
-              />
-            </td>
-          </tr>
+              {/* <td className="table-data__data table-data__data--little">
+                <img
+                  className="table-data__icon"
+                  src={editPen}
+                  alt=""
+                  onClick={(e) => {
+                    fnUpdate(an.idEvento);
+                  }}
+                />
+              </td> */}
+           </tr>
           );
         })}
-     
       </tbody>
     </table>
   );

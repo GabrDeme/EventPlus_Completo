@@ -30,6 +30,10 @@ export const presencesEventResource = 'PresencasEvento';
  * Rota para o recurso Comentario de Eventos
  */
 export const commentsResource = '/ComentariosEvento';
+/**
+ * Rota para o recurso Comentario de Eventos
+ */
+export const allowedCommentsResource = '/ComentariosEvento/ListarSomenteExibe';
 
 
 

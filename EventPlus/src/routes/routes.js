@@ -45,7 +45,7 @@ const Rotas = () => {
               <EventosAnterioresPage />
             </PrivateRoute>
           }
-          path={"/eventos-info"}
+          path={"/eventos-info/:idEvento"}
         />
         <Route
           path="/tiposeventos"

@@ -31,9 +31,7 @@ const LastEvent = ({ title, description, eventDate, idEvent }) => {
       </p>
 
       <Link
-        // onClick={() => {
-        //   visualizar(idEvent);
-        // }}
+        to= {`eventos-info/${idEvent}`}
         
         className="event-card__connect-link"
       >

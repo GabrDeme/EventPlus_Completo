@@ -3,147 +3,73 @@ import MainContent from "../../components/Main/MainContent";
 import Title from "../../components/Titulo/Titulo";
 import TableAn from "./TableAn/TableAn";
 import Container from "../../components/Container/Container";
-import Spinner from "../../components/Spinner/Spinner";
-import Info from "../../components/Info/Info";
+// import Spinner from "../../components/Spinner/Spinner";
 import api, {
   eventsResource,
+  eventsTypeResource,
   myEventsResource,
   lastEventResource,
+  allowedCommentsResource,
 } from "../../services/service";
 
 import "./EventosAnterioresPage.css";
 import { UserContext } from "../../context/AuthContext";
+import { dateFormatDbToView } from "../../utils/stringFunctions";
 
 const EventosAnterioresPage = () => {
   // state do menu mobile
 
-  const [quaisEventos, setQuaisEventos] = useState([]);
+  const [nomeEvento, setNomeEvento] = useState("");
+  const [descricao, setDescricao] = useState("");
+  const [tipoEvento, setTipoEvento] = useState("");
+  const [date, setDate] = useState("");
+  const [comments, setComments] = useState();
 
-  const [eventos, setEventos] = useState([]);
-  const [tipoEvento, setTipoEvento] = useState("1"); //código do tipo do Evento escolhido
-  const [showSpinner, setShowSpinner] = useState(false);
-  const [showInfo, setShowInfo] = useState(false);
 
   // recupera os dados globais do usuário
-  const { userData } = useContext(UserContext);
+  // const { userData } = useContext(UserContext);
   const [idEvento, setIdEvento] = useState("");
 
   useEffect(() => {
-    loadEventsType();
-  }, [tipoEvento, userData.userId]); //
-
-  async function loadEventsType() {
-    setShowSpinner(true);
-    // setEventos([]); //zera o array de eventos
-    if (tipoEvento === "1") {
-      //todos os eventos (Evento)
+    async function loadEvents(id) {
       try {
-        
-        const todosEventos = await api.get(lastEventResource);
-
-        // const eventosMarcados = //verificaPresenca
-        // (
-        //   todosEventos.data
-        // );
-
-        setEventos(todosEventos.data);
-///////////////////////////////////////////////////////////////////////////**////////////////////////////////////////////////////////////////////////////
-        console.clear();
-
-        console.log("TODOS OS EVENTOS");
-        console.log(todosEventos.data);
-
-      } catch (error) {
-        //colocar o notification
-        console.log("Erro na API");
-        console.log(error);
-      }
-    } else if (tipoEvento === "2") {
-      /**
-       * Lista os meus eventos (PresencasEventos)
-       * retorna um formato diferente de array
-       */
-      try {
-        const retornoEventos = await api.get(
-          `${myEventsResource}/${userData.userId}`
+        const myEvents = await api.get(`${eventsResource}/${id}`);
+        const myTypeEvents = await api.get(
+          `${eventsTypeResource}/${myEvents.data.idTipoEvento}`
         );
-        // console.clear();
-        // console.log("MINHAS PRESENÇAS");
-        // console.log(retornoEventos.data);
 
-        const arrEventos = []; //array vazio
+        setNomeEvento(myEvents.data.nomeEvento);
+        setDescricao(myEvents.data.descricao);
+        // setTipoEvento(myTypeEvents.data.titulo);
+        // setDate(dateFormatDbToView(myEvents.data.dataEvento));
 
-        retornoEventos.data.forEach((e) => {
-          arrEventos.push({
-            ...e.evento,
-            situacao: e.situacao,
-            idPresencaEvento: e.idPresencaEvento,
-          });
-        });
-
-        // console.log(arrEventos);
-        setEventos(arrEventos);
+        const myComments = await api.get(`${allowedCommentsResource}${id}`);
+        setComments(myComments.data);
       } catch (error) {
-        //colocar o notification
-        console.log("Erro na API");
-        console.log(error);
+        console.log("Não foi");
       }
-    } else {
-      setEventos([]);
     }
-    setShowSpinner(false);
-  }
 
-
-  
-  // toggle meus eventos ou todos os eventos
-  function myEvents(tpEvent) {
-    setTipoEvento(tpEvent);
-  }
-
-  const showHideInfo = (idEvent) => {
-    // console.clear();
-    // console.log("id do evento atual");
-    // console.log(idEvent);
-
-    setShowInfo(showInfo ? false : true);
-    // setUserData({ ...userData, idEvento: idEvent });
-    setIdEvento(idEvent);
-    // console.log("após guardar no state do usuário");
-    // console.log(idEvent);
-  };
-
-
+    loadEvents(idEvento);
+  }, []);
 
   return (
     <>
       <MainContent>
-        <Container>
-          <Title titleText={"Eventos Anteriores"} additionalClass="custom-title" />
+        <section>
+          <Container>
+            <Title titleText={"Ultimos Evento"} />
 
-        
-          <TableAn
-            dados={eventos}
-            fnShowInfo={showHideInfo}
-          />
-        </Container>
+            <TableAn
+              nome={nomeEvento}
+              descricao={descricao}
+              tipo={tipoEvento}
+              // data={date}
+              comentarios={comments}
+            />
+          </Container>
+        </section>
       </MainContent>
-      {/* SPINNER -Feito com position */}
-      {showSpinner ? <Spinner /> : null}
-
-      {showInfo ? (
-        <Info
-          // userId={userData.userId}
-          showHideInfo={showHideInfo}
-        //   fnGet={loadMyCommentary}
-        //   fnPost={postMyCommentary}
-        //   fnDelete={commentaryRemove}
-        //   comentaryText={comentario}
-          userId={userData.userId}
-          idEvento={idEvento}
-        //   idComentario={idComentario}
-        />
-      ) : null}
     </>
   );
 };
