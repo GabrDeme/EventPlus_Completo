@@ -1,4 +1,4 @@
-# Event+ Complete
+# Complete Event+
 
 ## Overview
 
@@ -33,6 +33,8 @@ The **Event+** project is a web-based system developed for **DevSchool**, an ins
 ### Database Management
 
 The **Event+** project utilizes SQL Server Management Studio (SSMS) to manage the relational database that stores user and event information. This ensures data integrity and enables efficient querying and reporting. The database schema is designed to accommodate user profiles, event details, and registration records, facilitating seamless data management and retrieval.
+
+---
 
 ## Technologies
 
